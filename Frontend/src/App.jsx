@@ -5,6 +5,7 @@ import ContentUpload from './components/ContentUpload';
 import ConfigureAction from './components/ConfigureAction';
 import Results from './components/Results';
 import { generateSampleQuiz } from './utils/quizUtils';
+import api from './api/api';
 
 function QuizSummarizerApp() {
   const [step, setStep] = useState('select'); // 'select', 'upload', 'configure', 'results'
@@ -24,6 +25,17 @@ function QuizSummarizerApp() {
   const [actionType, setActionType] = useState(''); // 'summarize' or 'quiz'
   const fileInputRef = useRef(null);
 
+
+  const fetchSummaryYoutube = async (url) =>{
+    try {
+        const response = await api.post("/summary/youtube", {"url":url});
+        return response.data.summary;
+    } catch (error) {
+        console.error("Error creating user:", error);
+        throw error;
+    }
+  };
+
   const processContent = async (type) => {
     setProcessing(true);
     setSummary('');
@@ -35,21 +47,18 @@ function QuizSummarizerApp() {
     // Simulate processing delay
     await new Promise(resolve => setTimeout(resolve, 2000));
 
-    // Mock summary generation based on content type
-    let mockSummary = '';
+    // summary generation based on content type
+    let Summary = '';
     if (type === 'summarize') {
       switch (contentType) {
         case 'pdf':
-          mockSummary = `This PDF document covers key concepts in the uploaded material. The main themes include comprehensive analysis of the subject matter, detailed explanations of core principles, and practical applications. The document provides structured information that serves as a valuable reference for understanding the topic in depth.`;
+          Summary = `This PDF document covers key concepts in the uploaded material. The main themes include comprehensive analysis of the subject matter, detailed explanations of core principles, and practical applications. The document provides structured information that serves as a valuable reference for understanding the topic in depth.`;
           break;
         case 'youtube':
-          mockSummary = `This YouTube video (${youtubeUrl}) presents educational content with clear explanations and visual demonstrations. The main points covered include step-by-step processes, expert insights, and practical examples. The video format allows for engaging presentation of complex topics through multimedia elements.`;
-          break;
-        case 'websearch':
-          mockSummary = `Based on web search results for "${webSearchQuery}", the content covers current information and diverse perspectives on the subject. The research includes recent developments, expert opinions, and comprehensive coverage of the specified topic.`;
+          Summary = await fetchSummaryYoutube(youtubeUrl);
           break;
         default:
-          mockSummary = "Content processed successfully with comprehensive analysis of key themes and concepts.";
+          Summary = "Content processed successfully with comprehensive analysis of key themes and concepts.";
       }
     }
 
@@ -57,7 +66,7 @@ function QuizSummarizerApp() {
     const mockQuiz = type === 'quiz' ? generateSampleQuiz(numQuestions, difficulty) : [];
 
     if (type === 'summarize') {
-      setSummary(mockSummary);
+      setSummary(Summary);
     } else {
       setQuiz(mockQuiz);
     }
