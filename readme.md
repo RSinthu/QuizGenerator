@@ -2,8 +2,6 @@
 
 A full-stack web application that transforms PDFs and YouTube videos into interactive quizzes and comprehensive summaries using AI-powered content processing.
 
-![Project Banner](https://via.placeholder.com/800x200/4F46E5/FFFFFF?text=Quiz+Generator+%26+Summarizer)
-
 ## 🚀 Features
 
 ### Content Processing
@@ -219,10 +217,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Tailwind CSS** for beautiful, responsive design
 - **React** ecosystem for modern frontend development
 
-## 📞 Support
-
-For support, please open an issue in the GitHub repository or contact the development team.
-
----
-
-**Made with ❤️ using React, FastAPI, and AI**
