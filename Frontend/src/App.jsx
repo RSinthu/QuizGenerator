@@ -4,15 +4,13 @@ import ContentTypeSelection from './components/ContentTypeSelection';
 import ContentUpload from './components/ContentUpload';
 import ConfigureAction from './components/ConfigureAction';
 import Results from './components/Results';
-import { generateSampleQuiz } from './utils/quizUtils';
 import api from './api/api';
 
 function QuizSummarizerApp() {
-  const [step, setStep] = useState('select'); // 'select', 'upload', 'configure', 'results'
-  const [contentType, setContentType] = useState(''); // 'pdf', 'youtube', or 'websearch'
+  const [step, setStep] = useState('select');
+  const [contentType, setContentType] = useState('');
   const [file, setFile] = useState(null);
   const [youtubeUrl, setYoutubeUrl] = useState('');
-  const [webSearchQuery, setWebSearchQuery] = useState('');
   const [processing, setProcessing] = useState(false);
   const [summary, setSummary] = useState('');
   const [quiz, setQuiz] = useState([]);
@@ -22,10 +20,10 @@ function QuizSummarizerApp() {
   const [numQuestions, setNumQuestions] = useState(5);
   const [difficulty, setDifficulty] = useState('medium');
   const [specificTopic, setSpecificTopic] = useState('');
-  const [actionType, setActionType] = useState(''); // 'summarize' or 'quiz'
+  const [actionType, setActionType] = useState('');
   const fileInputRef = useRef(null);
 
-
+  // Your existing API functions...
   const fetchSummaryYoutube = async (url) =>{
     try {
         const response = await api.post("/summary/youtube", {"url":url});
@@ -36,6 +34,57 @@ function QuizSummarizerApp() {
     }
   };
 
+  const uploadAndSummarizePDF = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await api.post("/summary/pdf", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data.summary;
+    } catch (err) {
+      console.error("Error summarizing PDF:", err.response?.data || err.message);
+      throw err;
+    }
+  };
+
+  const fetchQuizYoutube = async (url, specificTopic, numQuestions, difficulty) => {
+    try {
+      const response = await api.post(`/quiz/youtube`, {
+        url,
+        specificArea: specificTopic, 
+        no: numQuestions,              
+        difficulty,
+      });
+      return response.data.quiz;
+    } catch (err) {
+      console.error("Error generating quiz:", err.response?.data || err.message);
+      throw err;
+    }
+  }
+
+  const fetchPDFQuiz = async (file, specificTopic, numQuestions, difficulty) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('specificArea', specificTopic);
+      formData.append('no', numQuestions);
+      formData.append('difficulty', difficulty);
+      const response = await api.post(`/quiz/pdf`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    });
+      return response.data.quiz;
+    } catch (err) {
+      console.error("Error generating quiz:", err.response?.data || err.message);
+      throw err;
+    }
+  }
+
   const processContent = async (type) => {
     setProcessing(true);
     setSummary('');
@@ -44,35 +93,51 @@ function QuizSummarizerApp() {
     setShowResults(false);
     setCurrentQuestion(0);
 
-    // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    // summary generation based on content type
-    let Summary = '';
-    if (type === 'summarize') {
-      switch (contentType) {
-        case 'pdf':
-          Summary = `This PDF document covers key concepts in the uploaded material. The main themes include comprehensive analysis of the subject matter, detailed explanations of core principles, and practical applications. The document provides structured information that serves as a valuable reference for understanding the topic in depth.`;
-          break;
-        case 'youtube':
-          Summary = await fetchSummaryYoutube(youtubeUrl);
-          break;
-        default:
-          Summary = "Content processed successfully with comprehensive analysis of key themes and concepts.";
+    try {
+      // summary generation based on content type
+      let Summary = '';
+      if (type === 'summarize') {
+        switch (contentType) {
+          case 'pdf':
+            Summary = await uploadAndSummarizePDF(file);
+            break;
+          case 'youtube':
+            Summary = await fetchSummaryYoutube(youtubeUrl);
+            break;
+          default:
+            Summary = "Content processed successfully with comprehensive analysis of key themes and concepts.";
+        }
       }
+
+      // quiz generation
+      let Quiz = [];
+      if(type === 'quiz'){
+        switch (contentType) {
+          case 'pdf':
+            Quiz = await fetchPDFQuiz(file,specificTopic,numQuestions,difficulty);
+            break;
+          case 'youtube':
+            Quiz = await fetchQuizYoutube(youtubeUrl, specificTopic, numQuestions, difficulty);
+            break;
+          default:
+            Quiz = [];
+        }
+      }
+
+      if (type === 'summarize') {
+        setSummary(Summary);
+      } else {
+        setQuiz(Quiz);
+      }
+
+      setProcessing(false);
+      setStep('results');
+    } catch (error) {
+      console.error('Error processing content:', error);
+      setProcessing(false);
+      // You might want to show an error message to the user here
+      alert('Error processing content. Please try again.');
     }
-
-    // Mock quiz generation
-    const mockQuiz = type === 'quiz' ? generateSampleQuiz(numQuestions, difficulty) : [];
-
-    if (type === 'summarize') {
-      setSummary(Summary);
-    } else {
-      setQuiz(mockQuiz);
-    }
-
-    setProcessing(false);
-    setStep('results');
   };
 
   const resetApp = () => {
@@ -80,7 +145,6 @@ function QuizSummarizerApp() {
     setContentType('');
     setFile(null);
     setYoutubeUrl('');
-    setWebSearchQuery('');
     setSummary('');
     setQuiz([]);
     setAnswers({});
@@ -95,7 +159,6 @@ function QuizSummarizerApp() {
     contentType,
     file,
     youtubeUrl,
-    webSearchQuery,
     processing,
     summary,
     quiz,
@@ -114,7 +177,6 @@ function QuizSummarizerApp() {
     setContentType,
     setFile,
     setYoutubeUrl,
-    setWebSearchQuery,
     setProcessing,
     setSummary,
     setQuiz,
@@ -138,7 +200,7 @@ function QuizSummarizerApp() {
             Quiz Generator & Summarizer
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Transform your PDFs, YouTube videos, or web research into interactive quizzes and comprehensive summaries
+             Transform your PDFs and YouTube videos into interactive quizzes and comprehensive summaries
           </p>
         </div>
 

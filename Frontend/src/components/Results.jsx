@@ -39,7 +39,13 @@ function Results ({ state, actions }) {
       {!processing && !summary && quiz.length === 0 && (
         <div className="text-center py-12">
           <Brain className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-          <p className="text-gray-500">Processing complete. Results will appear here.</p>
+          <p className="text-gray-500">No results to display. Please try again.</p>
+          <button
+            onClick={actions.resetApp}
+            className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Start Over
+          </button>
         </div>
       )}
     </div>

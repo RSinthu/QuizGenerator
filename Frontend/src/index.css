@@ -1,1 +1,52 @@
 @import "tailwindcss";
+
+
+/* ReactMarkdown custom styles */
+.formatted-summary {
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.formatted-summary p:last-child {
+  margin-bottom: 0;
+}
+
+.formatted-summary table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.formatted-summary th,
+.formatted-summary td {
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.formatted-summary th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+.formatted-summary pre {
+  background-color: #f3f4f6;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.formatted-summary pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Dropdown hover effects */
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+.group:hover .group-hover\:visible {
+  visibility: visible;
+}

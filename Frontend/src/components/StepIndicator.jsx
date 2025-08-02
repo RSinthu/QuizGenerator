@@ -7,7 +7,6 @@ function StepIndicator({ step, contentType }) {
     switch (contentType) {
       case 'pdf': return 'Upload PDF';
       case 'youtube': return 'Enter URL';
-      case 'websearch': return 'Web Search';
       default: return 'Input';
     }
   };
@@ -16,7 +15,6 @@ function StepIndicator({ step, contentType }) {
     switch (contentType) {
       case 'pdf': return FileText;
       case 'youtube': return Youtube;
-      case 'websearch': return Globe;
       default: return Search;
     }
   };

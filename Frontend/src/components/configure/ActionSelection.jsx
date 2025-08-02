@@ -22,9 +22,7 @@ function ActionSelection ({ state, actions }) {
     {
       id: 'quiz',
       title: 'Generate Quiz',
-      description: contentType === 'websearch' 
-        ? 'Create interactive questions based on web research of your topic'
-        : 'Create interactive questions from your content',
+      description:'Create interactive questions from your content',
       icon: Brain,
       color: 'blue',
       features: [

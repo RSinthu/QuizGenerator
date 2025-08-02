@@ -2,7 +2,6 @@ import React from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import PDFUpload from './upload/PDFUpload';
 import YouTubeUpload from './upload/YouTubeUpload';
-import WebSearchUpload from './upload/WebSearchUpload';
 
 function ContentUpload ({ state, actions }) {
   const { contentType } = state;

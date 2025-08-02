@@ -35,22 +35,6 @@ function ContentTypeSelection ({ setContentType, setStep }){
         'Documentaries',
         'Online courses'
       ]
-    },
-    {
-      id: 'websearch',
-      title: 'Web Search',
-      description: 'Research topics using web search to gather comprehensive information',
-      icon: Globe,
-      iconColor: 'text-green-600',
-      bgColor: 'bg-green-100',
-      hoverBg: 'group-hover:bg-green-200',
-      hoverBorder: 'hover:border-green-300',
-      perfectFor: [
-        'Current topics',
-        'Research questions',
-        'Latest developments',
-        'Comprehensive overviews'
-      ]
     }
   ];
 
@@ -66,7 +50,7 @@ function ContentTypeSelection ({ setContentType, setStep }){
         <p className="text-gray-600">Select how you want to provide content for processing</p>
       </div>
       
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 gap-6 justify-items-center">
         {contentOptions.map((option) => {
           const Icon = option.icon;
           

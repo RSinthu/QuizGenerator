@@ -97,10 +97,6 @@ function QuizComplete ({ state, actions }) {
           <RotateCcw className="w-4 h-4 mr-2" />
           Retake Quiz
         </button>
-        <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center">
-          <Download className="w-4 h-4 mr-2" />
-          Export Results
-        </button>
         <button
           onClick={resetApp}
           className="px-6 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 flex items-center"

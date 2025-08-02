@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import summarizeRoutes
+from routes import summarizeRoutes, quizRoutes
 
 
 app = FastAPI()
@@ -14,7 +14,8 @@ app.add_middleware(
 )
 
 
-app.include_router(summarizeRoutes.router,prefix="/summary")
+app.include_router(summarizeRoutes.router, prefix="/summary")
+app.include_router(quizRoutes.router, prefix="/quiz")
 
 
 @app.get("/")
