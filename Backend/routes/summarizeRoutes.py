@@ -3,7 +3,6 @@ from schemas.summarySchema import youtubeRequest
 from langchain.chains.summarize import load_summarize_chain
 from langchain_community.document_loaders import  PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_ollama import OllamaLLM
 import validators
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
@@ -16,8 +15,6 @@ load_dotenv()
 groq_api_key = os.getenv("GROQ_API_KEY")
 router = APIRouter()
 llm = ChatGroq(model="llama-3.3-70b-versatile" , api_key=groq_api_key)
-
-llm2 = OllamaLLM(model="tinyllama:latest")
 
 @router.post("/youtube")
 async def summarizeYoutube(request:youtubeRequest):
