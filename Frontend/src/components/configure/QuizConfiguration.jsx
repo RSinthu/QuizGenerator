@@ -34,7 +34,7 @@ function QuizConfiguration({ state, actions }) {
         {/* Specific Topic/Area */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
-            Specific Topic or Area <span className="text-gray-500">(Optional)</span>
+            Specific Topic or Area <span className="text-gray-500">(Required)</span>
           </label>
           <input
             type="text"
@@ -42,6 +42,7 @@ function QuizConfiguration({ state, actions }) {
             value={specificTopic}
             onChange={(e) => setSpecificTopic(e.target.value)}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            required
           />
           <p className="mt-2 text-sm text-gray-500">
             Specify a particular subject area or topic to focus the quiz questions on. Leave blank to generate questions from the entire content.

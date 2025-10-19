@@ -14,7 +14,7 @@ from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
 import json
-from controllers.pdfController import get_related_docs
+from controllers.quizController import get_related_docs
 import google.generativeai as genai
 
 genai.configure(api_key = os.getenv("GOOGLE_API_KEY"))
